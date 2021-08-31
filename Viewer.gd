@@ -14,3 +14,4 @@ func _on_files_dropped(files, _screen):
 	$Control/Label.text = path
 	$WorldEnvironment.environment.background_sky.panorama = texture
 	$TrackballCamera.reset_rotation()
+

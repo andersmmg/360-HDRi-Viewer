@@ -19,6 +19,10 @@ boot_splash/bg_color=Color( 0.298039, 0.529412, 0.866667, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 
+[autoload]
+
+ShortcutCreator="*res://shortcut_creator.gd"
+
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/goutte.camera.trackball/plugin.cfg" )
