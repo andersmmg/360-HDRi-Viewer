@@ -3,11 +3,11 @@
 [ext_resource path="res://Viewer.gd" type="Script" id=1]
 [ext_resource path="res://addons/goutte.camera.trackball/trackball_camera.gd" type="Script" id=3]
 
-[sub_resource type="PanoramaSky" id=2]
+[sub_resource type="PanoramaSky" id=1]
 
-[sub_resource type="Environment" id=1]
+[sub_resource type="Environment" id=2]
 background_mode = 2
-background_sky = SubResource( 2 )
+background_sky = SubResource( 1 )
 
 [node name="Viewer" type="Spatial"]
 script = ExtResource( 1 )
@@ -31,7 +31,7 @@ __meta__ = {
 }
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 1 )
+environment = SubResource( 2 )
 
 [node name="TrackballCamera" type="Camera" parent="."]
 script = ExtResource( 3 )
