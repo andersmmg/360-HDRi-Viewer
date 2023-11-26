@@ -1,39 +1,40 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://bv1kil36w1wu3"]
 
-[ext_resource path="res://Viewer.gd" type="Script" id=1]
-[ext_resource path="res://addons/goutte.camera.trackball/trackball_camera.gd" type="Script" id=3]
+[ext_resource type="Script" path="res://Viewer.gd" id="1"]
+[ext_resource type="Script" path="res://addons/goutte.camera.trackball/trackball_camera.gd" id="3"]
 
-[sub_resource type="PanoramaSky" id=1]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_wu66e"]
 
-[sub_resource type="Environment" id=2]
+[sub_resource type="Sky" id="1"]
+sky_material = SubResource("PanoramaSkyMaterial_wu66e")
+
+[sub_resource type="Environment" id="2"]
 background_mode = 2
-background_sky = SubResource( 1 )
+sky = SubResource("1")
 
-[node name="Viewer" type="Spatial"]
-script = ExtResource( 1 )
+[node name="Viewer" type="Node3D"]
+script = ExtResource("1")
 
 [node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="Control"]
+layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -18.0
+offset_top = -18.0
 text = "Drag a 360 image or HDRi into the window to view!"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 2 )
+environment = SubResource("2")
 
-[node name="TrackballCamera" type="Camera" parent="."]
-script = ExtResource( 3 )
+[node name="TrackballCamera" type="Camera3D" parent="."]
+script = ExtResource("3")
 stabilize_horizon = true
 zoom_enabled = false
