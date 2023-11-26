@@ -1,4 +1,4 @@
-extends Camera
+extends Camera3D
 
 # Makes this Camera respond to input from mouse, keyboard, joystick and touch(?),
 # in order to rotate around its parent node while facing it.
@@ -37,40 +37,40 @@ extends Camera
 # - (you <3)
 
 # Keep the horizon stable, the UP to Y
-export var stabilize_horizon = false
-export var mouse_enabled = true
-export var mouse_invert = false
-export var mouse_strength = 1.0
+@export var stabilize_horizon = false
+@export var mouse_enabled = true
+@export var mouse_invert = false
+@export var mouse_strength = 1.0
 # If true will disable click+drag and move around with the mouse moves
-export var mouse_move_mode = false
+@export var mouse_move_mode = false
 # Directly bound keyboard is deprecated, use actions instead
-export var keyboard_enabled = false
-export var keyboard_invert = false
-export var keyboard_strength = 1.0
+@export var keyboard_enabled = false
+@export var keyboard_invert = false
+@export var keyboard_strength = 1.0
 # Directly bound joystick is deprecated, use actions instead
-export var joystick_enabled = true
-export var joystick_invert = false
-export var joystick_strength = 1.0
+@export var joystick_enabled = true
+@export var joystick_invert = false
+@export var joystick_strength = 1.0
 # The resting state of my joystick's x-axis is -0.05,
 # so we want to ignore any input below this threshold.
-export var joystick_threshold = 0.09
-export var joystick_device = 0
+@export var joystick_threshold = 0.09
+@export var joystick_device = 0
 # Use the project's Actions
-export var action_enabled = true
-export var action_invert = false
-export var action_up = 'ui_up'
-export var action_down = 'ui_down'
-export var action_right = 'ui_right'
-export var action_left = 'ui_left'
-export var action_strength = 1.0
+@export var action_enabled = true
+@export var action_invert = false
+@export var action_up = 'ui_up'
+@export var action_down = 'ui_down'
+@export var action_right = 'ui_right'
+@export var action_left = 'ui_left'
+@export var action_strength = 1.0
 
-export var zoom_enabled = true
-export var zoom_invert = false
-export var zoom_strength = 1.0
+@export var zoom_enabled = true
+@export var zoom_invert = false
+@export var zoom_strength = 1.0
 # As distances between the camera and its target
-export var zoom_minimum = 3
-export var zoom_maximum = 90.0
-export(float, 0.0, 1.0, 0.000001) var zoomInertiaTreshold = 0.0001
+@export var zoom_minimum = 3
+@export var zoom_maximum = 90.0
+@export var zoomInertiaTreshold = 0.0001 # (float, 0.0, 1.0, 0.000001)
 
 # There is no default Godot action using mousewheel, so
 # you should make your own actions and use them here.
@@ -78,15 +78,15 @@ export(float, 0.0, 1.0, 0.000001) var zoomInertiaTreshold = 0.0001
 # Perhaps the plugin could add those…
 # We're using `action_just_released` to catch mousewheels properly,
 # which makes it a bit awkward for key presses.
-export var action_zoom_in = 'ui_page_up'
-export var action_zoom_out = 'ui_page_down'
+@export var action_zoom_in = 'ui_page_up'
+@export var action_zoom_out = 'ui_page_down'
 
 # Multiplier applied to all lateral (non-zoom) inputs
-export var inertia_strength = 1.0
+@export var inertia_strength = 1.0
 # When inertia gets below this treshold, stop the camera
-export(float, 0.0, 1.0, 0.000001) var inertiaTreshold = 0.0001
+@export var inertiaTreshold = 0.0001 # (float, 0.0, 1.0, 0.000001)
 # Fraction of inertia lost on each frame
-export(float, 0.0, 1.0, 0.005) var friction = 0.07
+@export var friction = 0.07 # (float, 0.0, 1.0, 0.005)
 
 
 
@@ -94,11 +94,11 @@ export(float, 0.0, 1.0, 0.005) var friction = 0.07
 # Limit as fraction of a half-circle = TAU/2 = PI
 #export(float, 0, 1, 0.005) var yaw_limit = 1.0
 
-export var enable_pitch_limit = false  # up & down
+@export var enable_pitch_limit = false  # up & down
 # Limits as fraction of a quarter-circle = TAU/4
-export(float, 0, 1, 0.005) var pitch_up_limit = 1.0
-export(float, 0, 1, 0.005) var pitch_down_limit = 1.0
-export(float, 0, 100, 0.05) var pitch_limit_strength = 1.0
+@export var pitch_up_limit = 1.0 # (float, 0, 1, 0.005)
+@export var pitch_down_limit = 1.0 # (float, 0, 1, 0.005)
+@export var pitch_limit_strength = 1.0 # (float, 0, 100, 0.05)
 
 
 # If you need those as exported variables, it can happen
@@ -342,21 +342,21 @@ func apply_updown_constraint(on_transform, limit=0.75):
 	var eulers = on_transform.basis.get_euler()
 	eulers.x = clamp(eulers.x, -limit, limit)
 	eulers.z = 0.0
-	on_transform.basis = Basis(Quat(eulers))
+	on_transform.basis = Basis(Quaternion(eulers))
 	return on_transform
 
 
-func apply_rotation_from_tangent(tangent):
+func apply_rotation_from_tangent(orthogonal):
 	var tr = get_transform()
 	var up
 	if self.stabilize_horizon:
 		up = HORIZON_NORMAL
 	else:
-		up = tr.basis.xform(_cameraUp).normalized()
-	var rg = tr.basis.xform(_cameraRight).normalized()
-	var upQuat = Quat(up, -1 * tangent.x * TAU)
-	var rgQuat = Quat(rg, -1 * tangent.y * TAU)
-	var rotated_transform = Transform(upQuat * rgQuat) * tr
+		up = tr.basis * (_cameraUp).normalized()
+	var rg = tr.basis * (_cameraRight).normalized()
+	var upQuat = Quaternion(up, -1 * orthogonal.x * TAU)
+	var rgQuat = Quaternion(rg, -1 * orthogonal.y * TAU)
+	var rotated_transform = Transform3D(upQuat * rgQuat) * tr
 	set_transform(apply_constraints(rotated_transform))
 
 

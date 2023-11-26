@@ -6,16 +6,17 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
 
 [application]
 
 config/name="360 HDRi Viewer"
 run/main_scene="res://Viewer.tscn"
+config/features=PackedStringArray("4.0")
+boot_splash/bg_color=Color(0.298039, 0.529412, 0.866667, 1)
 boot_splash/image="res://splash.png"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
-boot_splash/bg_color=Color( 0.298039, 0.529412, 0.866667, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 
@@ -25,7 +26,7 @@ ShortcutCreator="*res://shortcut_creator.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/goutte.camera.trackball/plugin.cfg" )
+enabled=PackedStringArray("res://addons/goutte.camera.trackball/plugin.cfg")
 
 [physics]
 
@@ -33,4 +34,4 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-environment/default_environment="res://default_env.tres"
+environment/defaults/default_environment="res://default_env.tres"

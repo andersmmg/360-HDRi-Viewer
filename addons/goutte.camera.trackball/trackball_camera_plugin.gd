@@ -1,9 +1,9 @@
-tool
+@tool
 extends EditorPlugin
 
 func _enter_tree():
 	add_custom_type(
-		"TrackballCamera", "Camera",
+		"TrackballCamera", "Camera3D",
 		preload("res://addons/goutte.camera.trackball/trackball_camera.gd"),
 		preload("res://addons/goutte.camera.trackball/icon_trackball_camera.png")
 	)
